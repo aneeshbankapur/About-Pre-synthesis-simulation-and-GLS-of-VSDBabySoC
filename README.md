@@ -163,9 +163,27 @@ In this picture we can see the following signals:
 
 ## Observations
 1. **Reset Operation**:
-   - In both waveforms, reset=1 (inactive).
-   - That means the system is opertaing on active low reset.
+   - In both waveforms, reset=0 (inactive).
+   - That means the system is opertaing on active high reset.
 
 2. **Clocking**:
-   - Signal CLK is clearly toggling at a constant period of 
-   - That means the system is opertaing on active low reset.
+   - Signal CLK is clearly starts at 40 MHz, then adjusts to track 8× the reference frequency
+
+2. **Dataflow**:
+   - The RISC-V core sends 10-bit data (RV_TO_DAC[9:0]) to the DAC.
+
+Example values: 465 → 496 → 528 → 561 → 595 → 630 → 666.
+
+The DAC converts these digital values into a proportional analog output (OUT).
+
+Formula:
+```
+OUT = VREFL + [ {RV_TO_DAC}/{2^N - 1} ]* (VREFH - VREFL)
+```
+where:  
+-  N = 10(DAC resolution)  
+-  VREFH = high reference voltage  
+-  VREFL = low reference voltage
+  
+For RV_TO_DAC=528, OUT ≈ 0.516.
+
