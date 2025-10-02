@@ -1,1 +1,1 @@
-# About-Pre-synthesis-simulation-and-GLS-of-VSDBabySoC
+# About, Pre-synthesis simulation and GLS of VSDBabySoC
