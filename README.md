@@ -126,7 +126,7 @@ VSDBabySoC is a compact yet highly capable System on Chip (SoC) based on the RIS
   ```
    gtkwave output/pre_synth_sim/pre_synth_sim.vcd
   ```
-![pre_synthesis_sim](https://github.com/aneeshbankapur/About-Pre-synthesis-simulation-and-GLS-of-VSDBabySoC/blob/00aa2f6b9950272e04baec1200939cb934b500f9/pre_synthesis_sim.png)
+![pre_synthesis_sim](https://github.com/aneeshbankapur/About-Pre-synthesis-simulation-and-GLS-of-VSDBabySoC/blob/461378eb411b257eb3986bde748d529922b123d7/pre_synth_sim.png)
 In this picture we can see the following signals:
 
   * **CLK:** This is the `input CLK` signal of the `RVMYTH` core. This signal comes from the PLL, originally.
@@ -149,7 +149,7 @@ The result of the simulation (i.e. `post_synth_sim.vcd`) will be stored in the `
   ```
 Here is the final result:
 
-  ![gls](https://github.com/aneeshbankapur/About-Pre-synthesis-simulation-and-GLS-of-VSDBabySoC/blob/00aa2f6b9950272e04baec1200939cb934b500f9/gls.png)
+  ![gls](https://github.com/aneeshbankapur/About-Pre-synthesis-simulation-and-GLS-of-VSDBabySoC/blob/461378eb411b257eb3986bde748d529922b123d7/gls.png)
 
 In this picture we can see the following signals:
 
@@ -160,3 +160,12 @@ In this picture we can see the following signals:
   * **OUT:** This is a `real` datatype wire which can simulate analog values. It is the `output wire real OUT` signal of the `DAC` module. This signal comes from the DAC, originally.
 
 **PLEASE NOTE** that the sythesis process does not support `real` variables, so we must use the simple `wire` datatype for the `\vsdbabysoc.OUT` instead. The `iverilog` simulator always behaves `wire` as a digital signal. As a result we can not see the analog output via `\vsdbabysoc.OUT` port and we need to use `\dac.OUT` (which is a `real` datatype) instead.
+
+## Observations
+1. **Reset Operation**:
+   - In both waveforms, reset=1 (inactive).
+   - That means the system is opertaing on active low reset.
+
+2. **Clocking**:
+   - Signal CLK is clearly toggling at a constant period of 
+   - That means the system is opertaing on active low reset.
