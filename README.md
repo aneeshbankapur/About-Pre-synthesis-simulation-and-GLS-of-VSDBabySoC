@@ -86,10 +86,77 @@ VSDBabySoC is a compact yet highly capable System on Chip (SoC) based on the RIS
    ![333622249-04238eab-4d48-4d57-9061-f8b660a83d6e](https://github.com/user-attachments/assets/38253bb7-b658-496d-a043-15402219e089)
 
 
-### BabySoC components
+## BabySoC components
 
    - **RVMYTH (RISC-V CPU)**: RVMYTH is the brain of BabySoC, based on the open-source RISC-V design. It's a simple, customizable CPU that handles processing tasks and communicates with other parts of the SoC. This flexibility makes RVMYTH ideal for learning and experimenting with CPU architecture.
 
    - **Phase-Locked Loop (PLL)**: The PLL generates a stable clock signal to keep everything in BabySoC running in sync. It matches the SoC's clock with a reference frequency, ensuring reliable timing for RVMYTH and DAC. PLLs are widely used to keep signals aligned in communication and timing circuits.
 
    - **Digital-to-Analog Converter (DAC)**: The DAC turns digital signals from RVMYTH into analog output, like sound or video. This allows BabySoC to connect with external devices that use analog signals, such as speakers or displays.
+
+
+## Pre-Synthesis Simulation of VSDBabySoC
+ 1. First we need to install some important packages:
+
+  ```
+   sudo apt install make python python3 python3-pip git iverilog gtkwave docker.io
+   sudo chmod 666 /var/run/docker.sock
+   cd ~
+   pip3 install pyyaml click sandpiper-saas
+  ```
+
+  2. Now we can clone this repository in an arbitrary directory (we'll choose home directory here):
+
+  ```
+   cd ~
+   git clone https://github.com/manili/VSDBabySoC.git
+  ```
+
+  3. It's time to make the `pre_synth_sim.vcd`:
+
+  ```
+   cd VSDBabySoC
+   make pre_synth_sim
+  ```
+  
+  The result of the simulation (i.e. `pre_synth_sim.vcd`) will be stored in the `output/pre_synth_sim` directory.
+
+  4. We can see the waveforms by following command:
+
+  ```
+   gtkwave output/pre_synth_sim/pre_synth_sim.vcd
+  ```
+![pre_synth_sim](images/pre_synth_sim.png)
+In this picture we can see the following signals:
+
+  * **CLK:** This is the `input CLK` signal of the `RVMYTH` core. This signal comes from the PLL, originally.
+  * **reset:** This is the `input reset` signal of the `RVMYTH` core. This signal comes from an external source, originally.
+  * **OUT:** This is the `output OUT` signal of the `VSDBabySoC` module. This signal comes from the DAC (due to simulation restrictions it behaves like a digital signal which is incorrect), originally.
+  * **RV_TO_DAC[9:0]:** This is the 10-bit `output [9:0] OUT` port of the `RVMYTH` core. This port comes from the RVMYTH register #17, originally.
+  * **OUT:** This is a `real` datatype wire which can simulate analog values. It is the `output wire real OUT` signal of the `DAC` module. This signal comes from the DAC, originally.
+
+**PLEASE NOTE** that the sythesis process does not support `real` variables, so we must use the simple `wire` datatype for the `\vsdbabysoc.OUT` instead. The `iverilog` simulator always behaves `wire` as a digital signal. As a result we can not see the analog output via `\vsdbabysoc.OUT` port and we need to use `\dac.OUT` (which is a `real` datatype) instead.
+
+## Post-synthesis simulation (GLS) of VSDBabySoC
+  ```
+  $ cd ~/VSDBabySoC
+  $ make post_synth_sim
+  ```
+The result of the simulation (i.e. `post_synth_sim.vcd`) will be stored in the `output/post_synth_sim` directory and the waveform could be seen by the following command:
+
+  ```
+  $ gtkwave output/post_synth_sim/post_synth_sim.vcd
+  ```
+Here is the final result:
+
+  ![post_synth_sim](images/post_synth_sim.png)
+
+In this picture we can see the following signals:
+
+  * **\core.CLK:** This is the `input CLK` signal of the `RVMYTH` core. This signal comes from the PLL, originally.
+  * **reset:** This is the `input reset` signal of the `RVMYTH` core. This signal comes from an external source, originally.
+  * **OUT:** This is the `output OUT` signal of the `VSDBabySoC` module. This signal comes from the DAC (due to simulation restrictions it behaves like a digital signal which is incorrect), originally.
+  * **\core.OUT[9:0]:** This is the 10-bit `output [9:0] OUT` port of the `RVMYTH` core. This port comes from the RVMYTH register #17, originally.
+  * **OUT:** This is a `real` datatype wire which can simulate analog values. It is the `output wire real OUT` signal of the `DAC` module. This signal comes from the DAC, originally.
+
+**PLEASE NOTE** that the sythesis process does not support `real` variables, so we must use the simple `wire` datatype for the `\vsdbabysoc.OUT` instead. The `iverilog` simulator always behaves `wire` as a digital signal. As a result we can not see the analog output via `\vsdbabysoc.OUT` port and we need to use `\dac.OUT` (which is a `real` datatype) instead.
