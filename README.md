@@ -126,7 +126,7 @@ VSDBabySoC is a compact yet highly capable System on Chip (SoC) based on the RIS
   ```
    gtkwave output/pre_synth_sim/pre_synth_sim.vcd
   ```
-![pre_synth_sim](images/pre_synth_sim.png)
+![pre_synthesis_sim](https://github.com/aneeshbankapur/About-Pre-synthesis-simulation-and-GLS-of-VSDBabySoC/blob/00aa2f6b9950272e04baec1200939cb934b500f9/pre_synthesis_sim.png)
 In this picture we can see the following signals:
 
   * **CLK:** This is the `input CLK` signal of the `RVMYTH` core. This signal comes from the PLL, originally.
@@ -149,7 +149,7 @@ The result of the simulation (i.e. `post_synth_sim.vcd`) will be stored in the `
   ```
 Here is the final result:
 
-  ![post_synth_sim](images/post_synth_sim.png)
+  ![gls](https://github.com/aneeshbankapur/About-Pre-synthesis-simulation-and-GLS-of-VSDBabySoC/blob/00aa2f6b9950272e04baec1200939cb934b500f9/gls.png)
 
 In this picture we can see the following signals:
 
